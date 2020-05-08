@@ -1,0 +1,12 @@
+package davidstan.sbnz.integration.models;
+
+public enum Sector {
+	REAL_ESTATE,
+	HEALTH_CARE,
+	INFORMATION_TECHNOLOGY,
+	COMMUNICATION_SERVICES,
+	UTILITIES,
+	FINANCIALS,
+	INDUSTRIALS,
+	NA
+}

@@ -1,0 +1,5 @@
+package davidstan.sbnz.integration.models;
+
+public class StocksDTO {
+
+}

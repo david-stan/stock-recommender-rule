@@ -1,0 +1,40 @@
+package davidstan.sbnz.integration.facts;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+import davidstan.sbnz.integration.models.Sector;
+
+public class Stocks implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private Long id;
+	private double risk;
+	private Sector sector;
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, risk, sector);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Stocks other = (Stocks) obj;
+		return Objects.equals(id, other.id) && Double.doubleToLongBits(risk) == Double.doubleToLongBits(other.risk)
+				&& sector == other.sector;
+	}
+	
+	
+	
+	
+}
