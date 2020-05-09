@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import davidstan.sbnz.integration.facts.Item;
+import davidstan.sbnz.integration.facts.Stocks;
 
 @Service
 public class StockService {
@@ -18,15 +18,15 @@ public class StockService {
 
 	@Autowired
 	public StockService(KieContainer kieContainer) {
-		log.info("Initialising a new example session.");
+		log.info("Initializing a new example session.");
 		this.kieContainer = kieContainer;
 	}
 
-	public Item getClassifiedItem(Item i) {
+	public Stocks getStocks(Stocks s) {
 		KieSession kieSession = kieContainer.newKieSession();
-		kieSession.insert(i);
+		kieSession.insert(s);
 		kieSession.fireAllRules();
 		kieSession.dispose();
-		return i;
+		return s;
 	}
 }

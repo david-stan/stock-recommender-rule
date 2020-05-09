@@ -1,7 +1,7 @@
-E:\SBNZ\drools\spring-app\src\main\java\davidstan\sbnz\integration\SpringApp.java
-E:\SBNZ\drools\spring-app\src\main\java\davidstan\sbnz\integration\facts\Item.java
-E:\SBNZ\drools\spring-app\src\main\java\davidstan\sbnz\integration\models\StocksDTO.java
-E:\SBNZ\drools\spring-app\src\main\java\davidstan\sbnz\integration\facts\Stocks.java
-E:\SBNZ\drools\spring-app\src\main\java\davidstan\sbnz\integration\StockController.java
-E:\SBNZ\drools\spring-app\src\main\java\davidstan\sbnz\integration\StockService.java
-E:\SBNZ\drools\spring-app\src\main\java\davidstan\sbnz\integration\models\Sector.java
+E:\SBNZ\drool-proj\stock-recommender-rule\spring-app\src\main\java\davidstan\sbnz\integration\StockService.java
+E:\SBNZ\drool-proj\stock-recommender-rule\spring-app\src\main\java\davidstan\sbnz\integration\SpringApp.java
+E:\SBNZ\drool-proj\stock-recommender-rule\spring-app\src\main\java\davidstan\sbnz\integration\StockController.java
+E:\SBNZ\drool-proj\stock-recommender-rule\spring-app\src\main\java\davidstan\sbnz\integration\models\Sector.java
+E:\SBNZ\drool-proj\stock-recommender-rule\spring-app\src\main\java\davidstan\sbnz\integration\models\StocksDTO.java
+E:\SBNZ\drool-proj\stock-recommender-rule\spring-app\src\main\java\davidstan\sbnz\integration\facts\Item.java
+E:\SBNZ\drool-proj\stock-recommender-rule\spring-app\src\main\java\davidstan\sbnz\integration\facts\Stocks.java

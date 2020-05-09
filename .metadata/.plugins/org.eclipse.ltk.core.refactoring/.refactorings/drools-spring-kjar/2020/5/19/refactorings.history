@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy element &apos;classify-item-rules.drl&apos; to &apos;integration&apos;&#x0D;&#x0A;- Original project: &apos;drools-spring-kjar&apos;&#x0D;&#x0A;- Destination element: &apos;integration&apos;&#x0D;&#x0A;- Original element: &apos;classify-item-rules.drl&apos;" description="Copy file" element1="src/main/resources/sbnz/integracija/classify-item-rules.drl" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1588886056963" target="/spring-kjar/src/main/resources/davidstan/sbnz/integration" units="0" version="1.0"/>
-</session>
