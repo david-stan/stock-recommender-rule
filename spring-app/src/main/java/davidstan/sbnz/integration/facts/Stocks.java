@@ -10,12 +10,7 @@ import davidstan.sbnz.integration.models.StocksDTO;
 
 public class Stocks implements Serializable {
 
-	
-	private double risk;
 	private Sector sector;
-	
-	private boolean experience;
-	private boolean riskViable;
 	
 	private String personalSector;
 	private String riskSector;
@@ -25,7 +20,6 @@ public class Stocks implements Serializable {
 	private Map<String, Integer> sectorMapping;
 
 	public Stocks(StocksDTO stocksDTO) {
-		this.risk = 1;
 		personalSector = "INFORMATION_TECHNOLOGY";
 		this.sector = Sector.NA;
 		
@@ -76,36 +70,6 @@ public class Stocks implements Serializable {
 		this.closingSector = closingSector;
 	}
 
-	public boolean isExperience() {
-		return experience;
-	}
-
-
-
-	public void setExperience(boolean experience) {
-		this.experience = experience;
-	}
-
-
-
-	public boolean isRiskViable() {
-		return riskViable;
-	}
-
-
-
-	public void setRiskViable(boolean riskViable) {
-		this.riskViable = riskViable;
-	}
-
-
-
-	public double getRisk() {
-		return risk;
-	}
-	public void setRisk(double risk) {
-		this.risk = risk;
-	}
 	public Sector getSector() {
 		return sector;
 	}

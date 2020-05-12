@@ -15,13 +15,14 @@ from flask import jsonify
 
 app = Flask(__name__)
 
-def execute(sector):
-    return {
-        "messg": sector
-    }
+data1 = None
+data2 = None
+data3 = None
+data4 = None
 
-@app.route("/stock/<sector>", methods=["POST"])
-def get_sector():
+sectors = ['FINANCIALS', 'INFORMATION_TECHNOLOGY', 'COMMUNICATION_SERVICES', 'HEALTH_CARE']
+
+def refresh():
     table=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
     df = table[0]
 
@@ -40,37 +41,79 @@ def get_sector():
     today = date.today()
     start = "2020-04-01"
 
-    data1 = web.get_data_yahoo(df_finance['Symbol'].tolist()[:5], start=start, end=today)
-    data2 = web.get_data_yahoo(df_information['Symbol'].tolist()[:5], start=start, end=today)
-    data3 = web.get_data_yahoo(df_communication['Symbol'].tolist()[:5], start=start, end=today)
-    data4 = web.get_data_yahoo(df_health['Symbol'].tolist()[:5], start=start, end=today)
+    global data1
+    global data2
+    global data3
+    global data4
 
-    sectors = ['FINANCIALS', 'INFORMATION_TECHNOLOGY', 'COMMUNICATION_SERVICES', 'HEALTH_CARE']
+    data1 = web.get_data_yahoo(df_finance['Symbol'].tolist()[:50], start=start, end=today)
+    data2 = web.get_data_yahoo(df_information['Symbol'].tolist()[:50], start=start, end=today)
+    data3 = web.get_data_yahoo(df_communication['Symbol'].tolist()[:50], start=start, end=today)
+    data4 = web.get_data_yahoo(df_health['Symbol'].tolist()[:50], start=start, end=today)
+
+def request(): 
+
+    global data1
+    global data2
+    global data3
+    global data4
 
     output = []
 
     import operator
     std_list = [data1['Close'].std().mean(), data2['Close'].std().mean(), data3['Close'].std().mean(), data4['Close'].std().mean()]
+    print(std_list)
     index, value = min(enumerate(std_list), key=operator.itemgetter(1))
+
+    print(index)
 
     output.append(sectors[index])
 
     volume_list = [data1['Volume'].mean().mean(), data2['Volume'].mean().mean(), data3['Volume'].mean().mean(), data4['Volume'].mean().mean()]
-    index, value = max(enumerate(volume_list), key=operator.itemgetter(1))
+    print(volume_list)
+    index1, value1 = max(enumerate(volume_list), key=operator.itemgetter(1))
 
-    output.append(sectors[index])
+    print(index1)
+    output.append(sectors[index1])
 
     close_list = [data1['Close'].mean().mean(), data2['Close'].mean().mean(), data3['Close'].mean().mean(), data4['Close'].mean().mean()]
-    index, value = max(enumerate(close_list), key=operator.itemgetter(1))
+    print(close_list)
+    index2, value2 = max(enumerate(close_list), key=operator.itemgetter(1))
 
-    output.append(sectors[index])
+    print(index2)
+    output.append(sectors[index2])
+
     return output
+
+
+@app.route("/stock/<sector>", methods=["POST"])
+def get_sector():
+    return request()
 
 @app.route("/stock/sector", methods=["GET"])
 def get_stock_sector():
     return jsonify(get_sector())
 
+import atexit
+
+# v2.x version - see https://stackoverflow.com/a/38501429/135978
+# for the 3.x version
+from apscheduler.scheduler import Scheduler
+
+cron = Scheduler(daemon=True)
+# Explicitly kick off the background thread
+cron.start()
+
+@cron.interval_schedule(minutes=5)
+def job_function():
+    refresh()
+
+
+# Shutdown your cron thread if the web process is stopped
+atexit.register(lambda: cron.shutdown(wait=False))
+
 if __name__ == '__main__':
+    refresh()
     app.run(debug=True)
 
 # start = datetime.datetime(2020, 4, 4)
@@ -129,12 +172,3 @@ if __name__ == '__main__':
 # collection = get_collections(collection_name="Industrials", output_format='pandas', collection_type='sector', token="pk_9798e0bc697744ee953fc47b3e01dfa8").head()
 
 # print(collection)
-
-
-start = datetime.datetime(2020, 4, 4)
-end = datetime.datetime(2020, 5, 3)
-
-
-
-
-
