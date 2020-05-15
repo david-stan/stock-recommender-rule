@@ -1,0 +1,21 @@
+package davidstan.sbnz.integration;
+
+import davidstan.sbnz.integration.facts.Stocks;
+import davidstan.sbnz.integration.facts.Risk;
+import davidstan.sbnz.integration.models.Sector;
+
+agenda-group "risk"
+
+global ExternalService externalService;
+
+rule "Test rule"
+	lock-on-active
+    when
+        $r: Risk( )
+    then
+        String[] niz = externalService.test();
+        System.out.println(niz[1]);
+        
+        $r.setValid(true);
+        update($r);
+end

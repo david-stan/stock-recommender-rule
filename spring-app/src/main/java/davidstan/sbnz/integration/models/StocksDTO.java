@@ -2,14 +2,24 @@ package davidstan.sbnz.integration.models;
 
 public class StocksDTO {
 
-	private String sector;
+	private String personalSector;
+	private String educationSector;
+	
 	private boolean experience;
 	private boolean risk;
-	public String getSector() {
-		return sector;
+	
+	
+	public String getPersonalSector() {
+		return personalSector;
 	}
-	public void setSector(String sector) {
-		this.sector = sector;
+	public void setPersonalSector(String personalSector) {
+		this.personalSector = personalSector;
+	}
+	public String getEducationSector() {
+		return educationSector;
+	}
+	public void setEducationSector(String educationSector) {
+		this.educationSector = educationSector;
 	}
 	public boolean isExperience() {
 		return experience;

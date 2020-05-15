@@ -25,6 +25,8 @@ public class StockService {
 	public Stocks getStocks(Stocks s) {
 		KieSession kieSession = kieContainer.newKieSession();
 		kieSession.insert(s);
+		kieSession.setGlobal("externalService", new ExternalService());
+		kieSession.getAgenda().getAgendaGroup("profiling").setFocus();
 		kieSession.fireAllRules();
 		kieSession.dispose();
 		return s;

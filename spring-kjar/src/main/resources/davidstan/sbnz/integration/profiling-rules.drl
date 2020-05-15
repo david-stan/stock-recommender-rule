@@ -1,0 +1,63 @@
+package davidstan.sbnz.integration;
+
+import davidstan.sbnz.integration.facts.Stocks;
+import davidstan.sbnz.integration.facts.Risk;
+import davidstan.sbnz.integration.models.Sector;
+
+agenda-group "profiling"
+
+rule "Classify sector by risk"
+	lock-on-active true
+    when
+        $s: Stocks( $risk: riskSector != null )
+    then
+        $s.updateMap($risk);
+        update($s);
+end
+
+rule "Classify sector by volume"
+	lock-on-active true
+    when
+        $s: Stocks( $volume: volumeSector != null )
+    then
+        $s.updateMap($volume);
+        update($s);
+end
+
+rule "Classify sector by closing prices"
+	lock-on-active true
+    when
+        $s: Stocks( $closing: closingSector != null )
+    then
+        $s.updateMap($closing);
+        update($s);
+end
+
+rule "Classify sector by personal preference"
+	lock-on-active true
+    when
+        $s: Stocks( $personal: personalSector != null )
+    then
+        $s.updateMap($personal);
+        update($s);
+end
+
+rule "Classify sector by education"
+	lock-on-active true
+    when
+        $s: Stocks( $education: educationSector != null )
+    then
+        $s.updateMap($education);
+        update($s);
+end
+
+rule "Determine sector" salience -1
+	lock-on-active true
+    when
+        $s: Stocks( )
+    then
+        $s.chooseSector();
+        kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("risk").setFocus();
+        insert(new Risk(false));
+        delete($s);
+end

@@ -13,15 +13,24 @@ public class Stocks implements Serializable {
 	private Sector sector;
 	
 	private String personalSector;
+	private String educationSector;
+	
 	private String riskSector;
 	private String volumeSector;
 	private String closingSector;
 	
+	private boolean risk;
+	private boolean experience;
+	
 	private Map<String, Integer> sectorMapping;
 
 	public Stocks(StocksDTO stocksDTO) {
-		personalSector = "INFORMATION_TECHNOLOGY";
+		personalSector = stocksDTO.getPersonalSector();
+		educationSector = stocksDTO.getEducationSector();
 		this.sector = Sector.NA;
+		
+		risk = stocksDTO.isRisk();
+		experience = stocksDTO.isExperience();
 		
 		sectorMapping = new HashMap<>();
 	}
@@ -36,7 +45,29 @@ public class Stocks implements Serializable {
 		this.sector = Sector.valueOf(sector);
 	}
 	
-	
+	public boolean isRisk() {
+		return risk;
+	}
+
+	public void setRisk(boolean risk) {
+		this.risk = risk;
+	}
+
+	public boolean isExperience() {
+		return experience;
+	}
+
+	public void setExperience(boolean experience) {
+		this.experience = experience;
+	}
+
+	public String getEducationSector() {
+		return educationSector;
+	}
+
+	public void setEducationSector(String educationSector) {
+		this.educationSector = educationSector;
+	}
 
 	public String getPersonalSector() {
 		return personalSector;
