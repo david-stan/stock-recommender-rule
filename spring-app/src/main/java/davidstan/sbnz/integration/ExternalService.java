@@ -4,17 +4,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import davidstan.sbnz.integration.models.RiskDataDTO;
+
 @Service
 public class ExternalService {
 
 	public ExternalService() {}
 	
-	public String[] test() {
+	public RiskDataDTO[] test(String sector) {
 		RestTemplate restTemplate = new RestTemplate();
 		String fooResourceUrl
-		  = "http://localhost:5000/stock/sector";
-		ResponseEntity<String[]> response
-		  = restTemplate.getForEntity(fooResourceUrl, String[].class);
+		  = "http://localhost:5000/stock/risk/" + sector;
+		ResponseEntity<RiskDataDTO[]> response
+		  = restTemplate.getForEntity(fooResourceUrl, RiskDataDTO[].class);
+		
 		return response.getBody();
 	}
 	

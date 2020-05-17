@@ -13,9 +13,7 @@ rule "Test rule"
     when
         $r: Risk( )
     then
-        String[] niz = externalService.test();
-        System.out.println(niz[1]);
-        
+        System.out.println("Second rulegroup");
         $r.setValid(true);
         update($r);
 end

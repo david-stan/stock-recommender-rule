@@ -23,6 +23,7 @@ public class Stocks implements Serializable {
 	private boolean experience;
 	
 	private Map<String, Integer> sectorMapping;
+	
 
 	public Stocks(StocksDTO stocksDTO) {
 		personalSector = stocksDTO.getPersonalSector();

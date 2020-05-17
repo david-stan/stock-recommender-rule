@@ -22,6 +22,23 @@ data4 = None
 
 sectors = ['FINANCIALS', 'INFORMATION_TECHNOLOGY', 'COMMUNICATION_SERVICES', 'HEALTH_CARE']
 
+def risk_return(sector):
+
+    if (sector == "COMMUNICATION_SERVICES"):
+        df_std_risk = data1['Close'].std().dropna()
+        s = df_std_risk.to_dict()
+
+        ret_list = []
+        for key, value in s.items():
+            obj = {
+                "stock": key,
+                "std": value
+            }
+            ret_list.append(obj)
+
+        print(ret_list)
+    return ret_list
+
 def refresh():
     table=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
     df = table[0]
@@ -86,13 +103,16 @@ def request():
     return output
 
 
-@app.route("/stock/<sector>", methods=["POST"])
 def get_sector():
     return request()
 
 @app.route("/stock/sector", methods=["GET"])
 def get_stock_sector():
     return jsonify(get_sector())
+
+@app.route("/stock/risk/<sector>", methods=["GET"])
+def get_risk_return(sector):
+    return jsonify(risk_return(sector))
 
 import atexit
 
@@ -104,7 +124,7 @@ cron = Scheduler(daemon=True)
 # Explicitly kick off the background thread
 cron.start()
 
-@cron.interval_schedule(minutes=5)
+@cron.interval_schedule(hours=1)
 def job_function():
     refresh()
 

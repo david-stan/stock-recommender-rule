@@ -3,8 +3,11 @@ package davidstan.sbnz.integration;
 import davidstan.sbnz.integration.facts.Stocks;
 import davidstan.sbnz.integration.facts.Risk;
 import davidstan.sbnz.integration.models.Sector;
+import davidstan.sbnz.integration.models.RiskDataDTO;
 
 agenda-group "profiling"
+
+global ExternalService externalService;
 
 rule "Classify sector by risk"
 	lock-on-active true
@@ -58,6 +61,8 @@ rule "Determine sector" salience -1
     then
         $s.chooseSector();
         kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("risk").setFocus();
-        insert(new Risk(false));
+        RiskDataDTO[] data = externalService.test($s.getSector().toString());
+        System.out.println(data[0].getStock());
+        insert(new Risk(false, $s.isRisk(), $s.isExperience()));
         delete($s);
 end
