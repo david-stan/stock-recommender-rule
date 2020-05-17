@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import davidstan.sbnz.integration.facts.Risk;
 import davidstan.sbnz.integration.facts.Stocks;
 import davidstan.sbnz.integration.models.StocksDTO;
 
@@ -29,7 +30,7 @@ public class StockController {
 	}
 
 	@RequestMapping(value = "/item", method = RequestMethod.GET, produces = "application/json")
-	public Stocks getQuestions(@RequestBody StocksDTO stocksDTO) {
+	public Risk getQuestions(@RequestBody StocksDTO stocksDTO) {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		String fooResourceUrl
@@ -42,8 +43,8 @@ public class StockController {
 		stocks.setVolumeSector(response.getBody()[1]);
 		stocks.setClosingSector(response.getBody()[2]);
 
-		Stocks s2 = stockService.getStocks(stocks);
+		Risk r = stockService.getStocks(stocks);
 
-		return s2;
+		return r;
 	}
 }

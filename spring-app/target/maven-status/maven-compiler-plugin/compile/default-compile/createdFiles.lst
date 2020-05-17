@@ -1,9 +1,0 @@
-davidstan\sbnz\integration\facts\Risk.class
-davidstan\sbnz\integration\models\RiskDataDTO.class
-davidstan\sbnz\integration\ExternalService.class
-davidstan\sbnz\integration\facts\Stocks.class
-davidstan\sbnz\integration\SpringApp.class
-davidstan\sbnz\integration\models\StocksDTO.class
-davidstan\sbnz\integration\StockService.class
-davidstan\sbnz\integration\models\Sector.class
-davidstan\sbnz\integration\StockController.class

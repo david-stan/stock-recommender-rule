@@ -62,7 +62,6 @@ rule "Determine sector" salience -1
         $s.chooseSector();
         kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("risk").setFocus();
         RiskDataDTO[] data = externalService.test($s.getSector().toString());
-        System.out.println(data[0].getStock());
-        insert(new Risk(false, $s.isRisk(), $s.isExperience()));
+        insert(new Risk(true, $s.isRisk(), $s.isExperience(), data));
         delete($s);
 end

@@ -1,0 +1,7 @@
+package davidstan.sbnz.integration;
+
+import davidstan.sbnz.integration.facts.Risk;
+
+query "getRiskObject"
+	$insertedRiskObjectInDRLFile: Risk()
+end

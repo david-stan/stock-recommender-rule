@@ -8,12 +8,14 @@ agenda-group "risk"
 
 global ExternalService externalService;
 
-rule "Test rule"
-	lock-on-active
+rule "Stock selection rule"
     when
-        $r: Risk( )
+        $r: Risk( valid == true && risk == true && experience == true )
     then
-        System.out.println("Second rulegroup");
-        $r.setValid(true);
+    	$r.iterateStocks(5);
+    	$r.incrementIndex();
+        if ( $r.getStockIndex() == $r.getList().length ) {
+        	$r.setValid(false);
+        }
         update($r);
 end
