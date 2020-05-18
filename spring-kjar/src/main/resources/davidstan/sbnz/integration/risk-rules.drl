@@ -8,11 +8,47 @@ agenda-group "risk"
 
 global ExternalService externalService;
 
-rule "Stock selection rule"
+rule "Stock selection rule risk & experience"
     when
         $r: Risk( valid == true && risk == true && experience == true )
     then
-    	$r.iterateStocks(5);
+    	$r.iterateStocks(9);
+    	$r.incrementIndex();
+        if ( $r.getStockIndex() == $r.getList().length ) {
+        	$r.setValid(false);
+        }
+        update($r);
+end
+
+rule "Stock selection rule experience"
+    when
+        $r: Risk( valid == true && risk == false && experience == true )
+    then
+    	$r.iterateStocks(7);
+    	$r.incrementIndex();
+        if ( $r.getStockIndex() == $r.getList().length ) {
+        	$r.setValid(false);
+        }
+        update($r);
+end
+
+rule "Stock selection rule riske"
+    when
+        $r: Risk( valid == true && risk == true && experience == false )
+    then
+    	$r.iterateStocks(6.3);
+    	$r.incrementIndex();
+        if ( $r.getStockIndex() == $r.getList().length ) {
+        	$r.setValid(false);
+        }
+        update($r);
+end
+
+rule "Stock selection rule"
+    when
+        $r: Risk( valid == true && risk == false && experience == false )
+    then
+    	$r.iterateStocks(4.8);
     	$r.incrementIndex();
         if ( $r.getStockIndex() == $r.getList().length ) {
         	$r.setValid(false);

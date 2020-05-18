@@ -25,6 +25,20 @@ sectors = ['FINANCIALS', 'INFORMATION_TECHNOLOGY', 'COMMUNICATION_SERVICES', 'HE
 def risk_return(sector):
 
     if (sector == "COMMUNICATION_SERVICES"):
+        df_std_risk = data3['Close'].std().dropna()
+        s = df_std_risk.to_dict()
+
+        ret_list = []
+        for key, value in s.items():
+            obj = {
+                "stock": key,
+                "std": value
+            }
+            ret_list.append(obj)
+
+        return ret_list
+
+    elif (sector == "FINANCIALS"):
         df_std_risk = data1['Close'].std().dropna()
         s = df_std_risk.to_dict()
 
@@ -36,8 +50,35 @@ def risk_return(sector):
             }
             ret_list.append(obj)
 
-        print(ret_list)
-    return ret_list
+        return ret_list
+
+    elif (sector == "INFORMATION_TECHNOLOGY"):
+        df_std_risk = data2['Close'].std().dropna()
+        s = df_std_risk.to_dict()
+
+        ret_list = []
+        for key, value in s.items():
+            obj = {
+                "stock": key,
+                "std": value
+            }
+            ret_list.append(obj)
+
+        return ret_list
+
+    elif (sector == "HEALTH_CARE"):
+        df_std_risk = data4['Close'].std().dropna()
+        s = df_std_risk.to_dict()
+
+        ret_list = []
+        for key, value in s.items():
+            obj = {
+                "stock": key,
+                "std": value
+            }
+            ret_list.append(obj)
+
+        return ret_list
 
 def refresh():
     table=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
