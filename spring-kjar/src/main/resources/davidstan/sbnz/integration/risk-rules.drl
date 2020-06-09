@@ -14,9 +14,6 @@ rule "Stock selection rule risk & experience"
     then
     	$r.iterateStocks(9);
     	$r.incrementIndex();
-        if ( $r.getStockIndex() == $r.getList().length ) {
-        	$r.setValid(false);
-        }
         update($r);
 end
 
@@ -26,9 +23,6 @@ rule "Stock selection rule experience"
     then
     	$r.iterateStocks(7);
     	$r.incrementIndex();
-        if ( $r.getStockIndex() == $r.getList().length ) {
-        	$r.setValid(false);
-        }
         update($r);
 end
 
@@ -38,9 +32,6 @@ rule "Stock selection rule riske"
     then
     	$r.iterateStocks(6.3);
     	$r.incrementIndex();
-        if ( $r.getStockIndex() == $r.getList().length ) {
-        	$r.setValid(false);
-        }
         update($r);
 end
 
@@ -50,8 +41,5 @@ rule "Stock selection rule"
     then
     	$r.iterateStocks(4.8);
     	$r.incrementIndex();
-        if ( $r.getStockIndex() == $r.getList().length ) {
-        	$r.setValid(false);
-        }
         update($r);
 end

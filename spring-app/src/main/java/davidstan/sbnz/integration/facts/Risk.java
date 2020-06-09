@@ -32,6 +32,9 @@ public class Risk {
 	
 	public void incrementIndex() {
 		stockIndex++;
+		if (stockIndex == list.length) {
+			valid = false;
+		}
 	}	
 	
 	public ArrayList<RiskDataDTO> getRiskFreeStocks() {

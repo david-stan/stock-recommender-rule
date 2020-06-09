@@ -6,6 +6,11 @@ public class RiskDataDTO {
 	private String std;
 	
 	public RiskDataDTO() {}
+	
+	public RiskDataDTO(String stock, String std) {
+		this.stock = stock;
+		this.std = std;
+	}
 
 	public String getStock() {
 		return stock;

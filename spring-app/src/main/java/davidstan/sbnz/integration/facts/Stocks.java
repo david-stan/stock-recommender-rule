@@ -24,6 +24,9 @@ public class Stocks implements Serializable {
 	
 	private Map<String, Integer> sectorMapping;
 	
+	public Stocks() {
+		sectorMapping = new HashMap<>();
+	}
 
 	public Stocks(StocksDTO stocksDTO) {
 		personalSector = stocksDTO.getPersonalSector();

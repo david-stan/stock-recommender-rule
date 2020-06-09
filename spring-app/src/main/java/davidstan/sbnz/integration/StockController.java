@@ -29,7 +29,7 @@ public class StockController {
 		this.stockService = stockService;
 	}
 
-	@RequestMapping(value = "/item", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/stocks", method = RequestMethod.GET, produces = "application/json")
 	public Risk getQuestions(@RequestBody StocksDTO stocksDTO) {
 		
 		RestTemplate restTemplate = new RestTemplate();

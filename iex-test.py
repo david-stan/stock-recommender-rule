@@ -1,14 +1,7 @@
 import pandas as pd
-import datetime
 import pandas_datareader.data as web
-import pandas_datareader.iex.ref as ref
-import pandas_datareader.tiingo as tiingo
 
 import json
-
-from iexfinance.stocks import Stock
-from iexfinance.stocks import get_collections
-from iexfinance.stocks import get_historical_data
 
 from flask import Flask
 from flask import jsonify
