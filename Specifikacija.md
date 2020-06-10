@@ -29,3 +29,32 @@ Izlazi:
 Primer:
 
 - Razmatramo akciju koja u zadnje vreme (par meseci) ima odličan trend, ali je u prošlosti imala velike padove i nekonzistentnost, stoga takvu akciju smatramo većim rizikom i dajemo joj manju ocenu. Dok na primer, za akciju koja se skoro pojavila na tržištu i nema neku veliku vrednost, ali je jako stabilna i ima konzistentan rast, ocenjujemo većom ocenom i predlažemo je korisniku.
+
+Pravila:
+- Prvi korak je profilisanje korisnika na osnovu njegovog odabira sektora na osnovu lične zainteresovanosti kao i obrazovanja iz konkretne oblasti (sektora). Da bi se odabrao odgovarajući sektor koriste se pravila na osnovu forward chaining principa koja kroz iteracije biraju konačnu oblast. Primer pravila:
+
+
+<pre><code>rule "Classify sector by education"
+	lock-on-active true
+    when
+        $s: Stocks( $education: educationSector != null )
+    then
+        $s.updateMap($education);
+        update($s);
+end
+</code></pre>
+
+- Drugi korak je filtriranje akcija iz odabrane oblasti, koje su dobijene iz eksternog servisa, na osnovu vrednosti njihovog rizika. Na osnovu backward chaining-a se posmatraju parametri rizika i ackije svrstavaju u odredjene klase rizika. Jednostavna varijanta:
+
+<pre><code>
+rule "Stock selection rule risk"
+    when
+        $r: Risk( valid == true && risk == true && experience == false )
+    then
+    	$r.iterateStocks(6.3);
+    	$r.incrementIndex();
+        update($r);
+end
+</code></pre>
+
+- Treći korak je upit koji dobavlja Risk fact i vraća filtriranu listu akcija nazad klijentu u json formatu.
