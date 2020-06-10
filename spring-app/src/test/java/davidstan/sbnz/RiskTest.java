@@ -29,7 +29,7 @@ import davidstan.sbnz.integration.models.Sector;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = davidstan.sbnz.integration.SpringApp.class)
-public class RulesTest {
+public class RiskTest {
 	
 	@Autowired
 	private KieContainer kieContainer;
@@ -79,7 +79,7 @@ public class RulesTest {
 	}
 	
 	@Test
-	public void whenStocksValid_assertChosenSectorIsValid() {
+	public void whenStocksValid_assertFilteredStocks() {
  
 		this.kieSession.fireAllRules();
 		Risk risk = null;
@@ -93,6 +93,8 @@ public class RulesTest {
 		assertNotNull(risk);
 		assertNotEquals(risk.getRiskFreeStocks().size(), 0);
 		assertEquals(risk.getSector(), Sector.HEALTH_CARE);
+		
+		assertEquals(6, risk.getRiskFreeStocks().size());
 	}
 	
 }

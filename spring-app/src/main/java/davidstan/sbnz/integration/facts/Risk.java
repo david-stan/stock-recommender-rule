@@ -3,9 +3,12 @@ package davidstan.sbnz.integration.facts;
 import java.util.ArrayList;
 
 import davidstan.sbnz.integration.models.RiskDataDTO;
+import davidstan.sbnz.integration.models.Sector;
 
 public class Risk {
 
+	
+	private Sector sector;
 	private boolean valid;
 	private boolean risk;
 	private boolean experience;
@@ -14,7 +17,8 @@ public class Risk {
 	
 	private int stockIndex;
 	
-	public Risk(boolean valid, boolean risk, boolean experience, RiskDataDTO[] list) {
+	public Risk(boolean valid, boolean risk, boolean experience, RiskDataDTO[] list, Sector sector) {
+		this.sector = sector;
 		this.valid = valid;
 		this.risk = risk;
 		this.experience = experience;
@@ -86,7 +90,15 @@ public class Risk {
 		this.experience = experience;
 	}
 
+	
 
+	public Sector getSector() {
+		return sector;
+	}
+
+	public void setSector(Sector sector) {
+		this.sector = sector;
+	}
 
 	public boolean isValid() {
 		return valid;
