@@ -2,18 +2,16 @@ package davidstan.sbnz.integration.facts;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import davidstan.sbnz.integration.models.Sector;
-import davidstan.sbnz.integration.models.StocksDTO;
+import davidstan.sbnz.integration.models.*;
 
 public class Stocks implements Serializable {
 
 	private Sector sector;
-	
-	private String personalSector;
-	private String educationSector;
 	
 	private String riskSector;
 	private String volumeSector;
@@ -22,6 +20,8 @@ public class Stocks implements Serializable {
 	private boolean risk;
 	private boolean experience;
 	
+	private List<Profiles> chosenProfile;
+	
 	private Map<String, Integer> sectorMapping;
 	
 	public Stocks() {
@@ -29,14 +29,21 @@ public class Stocks implements Serializable {
 	}
 
 	public Stocks(StocksDTO stocksDTO) {
-		personalSector = stocksDTO.getPersonalSector();
-		educationSector = stocksDTO.getEducationSector();
 		this.sector = Sector.NA;
 		
 		risk = stocksDTO.isRisk();
 		experience = stocksDTO.isExperience();
 		
 		sectorMapping = new HashMap<>();
+		
+		this.chosenProfile = new LinkedList<>();
+		if (stocksDTO.isBank()) this.chosenProfile.add(Profiles.WORK_BANK);
+		if (stocksDTO.isFunds()) this.chosenProfile.add(Profiles.FUNDS);
+		if (stocksDTO.isEconomy()) this.chosenProfile.add(Profiles.ECONOMY_SCHOOL);
+		if (stocksDTO.isExperience()) this.chosenProfile.add(Profiles.EXPERIENCE);
+		if (stocksDTO.isRisk()) this.chosenProfile.add(Profiles.RISKY);
+		if (stocksDTO.isMedical()) this.chosenProfile.add(Profiles.MEDICAL_WORKER);
+		if (stocksDTO.isTechnology()) this.chosenProfile.add(Profiles.INTEREST_TECHNOLOGY);
 	}
 	
 	public void updateMap(String key) {
@@ -49,6 +56,16 @@ public class Stocks implements Serializable {
 		this.sector = Sector.valueOf(sector);
 	}
 	
+	
+	
+	public List<Profiles> getChosenProfile() {
+		return chosenProfile;
+	}
+
+	public void setChosenProfile(List<Profiles> chosenProfile) {
+		this.chosenProfile = chosenProfile;
+	}
+
 	public boolean isRisk() {
 		return risk;
 	}
@@ -63,22 +80,6 @@ public class Stocks implements Serializable {
 
 	public void setExperience(boolean experience) {
 		this.experience = experience;
-	}
-
-	public String getEducationSector() {
-		return educationSector;
-	}
-
-	public void setEducationSector(String educationSector) {
-		this.educationSector = educationSector;
-	}
-
-	public String getPersonalSector() {
-		return personalSector;
-	}
-
-	public void setPersonalSector(String personalSector) {
-		this.personalSector = personalSector;
 	}
 
 	public String getRiskSector() {
