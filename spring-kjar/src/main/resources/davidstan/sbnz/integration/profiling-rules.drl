@@ -2,66 +2,80 @@ package davidstan.sbnz.integration;
 
 import davidstan.sbnz.integration.facts.Stocks;
 import davidstan.sbnz.integration.facts.Risk;
+import davidstan.sbnz.integration.facts.Sectors;
 import davidstan.sbnz.integration.models.Sector;
 import davidstan.sbnz.integration.models.RiskDataDTO;
+import davidstan.sbnz.integration.models.Profiles;
+
 
 agenda-group "profiling"
 
 global ExternalService externalService;
 
-rule "Classify sector by risk"
-	lock-on-active true
-    when
-        $s: Stocks( $risk: riskSector != null )
-    then
-        $s.updateMap($risk);
-        update($s);
+rule "Financial Sector rule"
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*($count*0.1)))
+	when 
+		$sec: Sectors(sector == Sector.FINANCIALS, $std: std, $vol: volume, $close: close, $attr: attributes)
+		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this, this memberOf $attr) from $profile,
+			count($p)
+		)
+	then
+		System.out.println("Financial: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*($count*0.1)));
+		modify($sto) { setSector(Sector.FINANCIALS) }
 end
 
-rule "Classify sector by volume"
-	lock-on-active true
-    when
-        $s: Stocks( $volume: volumeSector != null )
-    then
-        $s.updateMap($volume);
-        update($s);
+rule "Information Sector rule"
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*($count*0.1)))
+	when 
+		$sec: Sectors(sector == Sector.INFORMATION_TECHNOLOGY, $std: std, $vol: volume, $close: close, $attr: attributes)
+		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this, this memberOf $attr) from $profile,
+			count($p)
+		)
+	then
+		System.out.println("Information: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*($count*0.1)));
+		modify($sto) { setSector(Sector.INFORMATION_TECHNOLOGY) }
 end
 
-rule "Classify sector by closing prices"
-	lock-on-active true
-    when
-        $s: Stocks( $closing: closingSector != null )
-    then
-        $s.updateMap($closing);
-        update($s);
+rule "Communication Sector rule"
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*($count*0.1)))
+	when 
+		$sec: Sectors(sector == Sector.COMMUNICATION_SERVICES, $std: std, $vol: volume, $close: close, $attr: attributes)
+		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this, this memberOf $attr) from $profile,
+			count($p)
+		)
+	then
+		System.out.println("Communication: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*($count*0.1)));
+		modify($sto) { setSector(Sector.COMMUNICATION_SERVICES) }
 end
 
-rule "Classify sector by personal preference"
-	lock-on-active true
-    when
-        $s: Stocks( $personal: personalSector != null )
-    then
-        $s.updateMap($personal);
-        update($s);
+rule "Health Sector rule"
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*($count*0.1)))
+	when 
+		$sec: Sectors(sector == Sector.HEALTH_CARE, $std: std, $vol: volume, $close: close, $attr: attributes)
+		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this, this memberOf $attr) from $profile,
+			count($p)
+		)
+	then
+		System.out.println("Health: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*($count*0.1)));
+		modify($sto) { setSector(Sector.HEALTH_CARE) }
 end
 
-rule "Classify sector by education"
-	lock-on-active true
+rule "Get chosen sector data rule"
     when
-        $s: Stocks( $education: educationSector != null )
+        $s: Stocks( sector != Sector.NA )
     then
-        $s.updateMap($education);
-        update($s);
-end
-
-rule "Determine sector" salience -1
-	lock-on-active true
-    when
-        $s: Stocks( )
-    then
-        $s.chooseSector();
+    	System.out.println("Hello risk");
         kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("risk").setFocus();
         RiskDataDTO[] data = externalService.test($s.getSector().toString());
         insert(new Risk(true, $s.isRisk(), $s.isExperience(), data, $s.getSector()));
+        System.out.println("Inserted");
         delete($s);
 end

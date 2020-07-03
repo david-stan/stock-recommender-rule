@@ -113,26 +113,56 @@ def request():
 
     import operator
     std_list = [data1['Close'].std().mean(), data2['Close'].std().mean(), data3['Close'].std().mean(), data4['Close'].std().mean()]
-    print(std_list)
-    index, value = min(enumerate(std_list), key=operator.itemgetter(1))
+    print('std ', std_list)
+    #index, value = min(enumerate(std_list), key=operator.itemgetter(1))
 
-    print(index)
+    #print(index)
 
-    output.append(sectors[index])
+    #output.append(sectors[index])
 
     volume_list = [data1['Volume'].mean().mean(), data2['Volume'].mean().mean(), data3['Volume'].mean().mean(), data4['Volume'].mean().mean()]
-    print(volume_list)
-    index1, value1 = max(enumerate(volume_list), key=operator.itemgetter(1))
+    print('vol ', volume_list)
+    #index1, value1 = max(enumerate(volume_list), key=operator.itemgetter(1))
 
-    print(index1)
-    output.append(sectors[index1])
+    #print(index1)
+    #output.append(sectors[index1])
 
     close_list = [data1['Close'].mean().mean(), data2['Close'].mean().mean(), data3['Close'].mean().mean(), data4['Close'].mean().mean()]
-    print(close_list)
-    index2, value2 = max(enumerate(close_list), key=operator.itemgetter(1))
+    print('close ', close_list)
+    #index2, value2 = max(enumerate(close_list), key=operator.itemgetter(1))
 
-    print(index2)
-    output.append(sectors[index2])
+    #print(index2)
+    #output.append(sectors[index2])
+
+    output.append(
+        {
+            "std": std_list[0],
+            "volume": volume_list[0],
+            "close": close_list[0]
+        }
+    )
+    output.append(
+        {
+            "std": std_list[1],
+            "volume": volume_list[1],
+            "close": close_list[1]
+        }
+    )
+    output.append(
+        {
+            "std": std_list[2],
+            "volume": volume_list[2],
+            "close": close_list[2]
+        }
+    )
+    output.append(
+        {
+            "std": std_list[3],
+            "volume": volume_list[3],
+            "close": close_list[3]
+        }
+    )
+    
 
     return output
 

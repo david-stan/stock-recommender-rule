@@ -18,8 +18,11 @@ import org.springframework.web.client.RestTemplate;
 
 
 import davidstan.sbnz.integration.facts.Risk;
+import davidstan.sbnz.integration.facts.Sectors;
 import davidstan.sbnz.integration.facts.Stocks;
 import davidstan.sbnz.integration.models.AddRuleDTO;
+import davidstan.sbnz.integration.models.RiskAssessmentDTO;
+import davidstan.sbnz.integration.models.Sector;
 import davidstan.sbnz.integration.models.StocksDTO;
 
 @RestController
@@ -41,15 +44,12 @@ public class StockController {
 		RestTemplate restTemplate = new RestTemplate();
 		String fooResourceUrl
 		  = "http://localhost:5000/stock/sector";
-		ResponseEntity<String[]> response
-		  = restTemplate.getForEntity(fooResourceUrl, String[].class);
+		ResponseEntity<RiskAssessmentDTO[]> response
+		  = restTemplate.getForEntity(fooResourceUrl, RiskAssessmentDTO[].class);
 
-		Stocks stocks = new Stocks(stocksDTO);
-		stocks.setRiskSector(response.getBody()[0]);
-		stocks.setVolumeSector(response.getBody()[1]);
-		stocks.setClosingSector(response.getBody()[2]);
-
-		Risk r = stockService.getStocks(stocks);
+		RiskAssessmentDTO[] data = response.getBody();
+		
+		Risk r = stockService.getStocks(data, stocksDTO);
 
 		return r;
 	}
