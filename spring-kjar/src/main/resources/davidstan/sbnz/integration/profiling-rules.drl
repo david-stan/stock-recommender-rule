@@ -13,7 +13,7 @@ agenda-group "profiling"
 global ExternalService externalService;
 
 rule "Financial Sector rule"
-	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*($count*0.1)))
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)/($count+0.1)))
 	when 
 		$sec: Sectors(sector == Sector.FINANCIALS, $std: std, $vol: volume, $close: close, $attr: attributes)
 		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
@@ -22,12 +22,16 @@ rule "Financial Sector rule"
 			count($p)
 		)
 	then
-		System.out.println("Financial: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*($count*0.1)));
-		modify($sto) { setSector(Sector.FINANCIALS) }
+		double $score = 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)/($count+0.1));
+		System.out.println("Financial: " + $score);
+		modify($sto) {
+			setSector(Sector.FINANCIALS),
+			setScore($score)
+		}
 end
 
 rule "Information Sector rule"
-	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*($count*0.1)))
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)/($count+0.1)))
 	when 
 		$sec: Sectors(sector == Sector.INFORMATION_TECHNOLOGY, $std: std, $vol: volume, $close: close, $attr: attributes)
 		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
@@ -36,12 +40,16 @@ rule "Information Sector rule"
 			count($p)
 		)
 	then
-		System.out.println("Information: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*($count*0.1)));
-		modify($sto) { setSector(Sector.INFORMATION_TECHNOLOGY) }
+		double $score = 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)/($count+0.1));
+		System.out.println("Information: " + $score);
+		modify($sto) {
+			setSector(Sector.INFORMATION_TECHNOLOGY),
+			setScore($score)
+		}
 end
 
 rule "Communication Sector rule"
-	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*($count*0.1)))
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)/($count+0.1)))
 	when 
 		$sec: Sectors(sector == Sector.COMMUNICATION_SERVICES, $std: std, $vol: volume, $close: close, $attr: attributes)
 		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
@@ -50,12 +58,16 @@ rule "Communication Sector rule"
 			count($p)
 		)
 	then
-		System.out.println("Communication: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*($count*0.1)));
-		modify($sto) { setSector(Sector.COMMUNICATION_SERVICES) }
+		double $score = 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)/($count+0.1));
+		System.out.println("Communication: " + $score);
+		modify($sto) {
+			setSector(Sector.COMMUNICATION_SERVICES),
+			setScore($score)
+		}
 end
 
 rule "Health Sector rule"
-	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*($count*0.1)))
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)/($count+0.1)))
 	when 
 		$sec: Sectors(sector == Sector.HEALTH_CARE, $std: std, $vol: volume, $close: close, $attr: attributes)
 		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
@@ -64,8 +76,12 @@ rule "Health Sector rule"
 			count($p)
 		)
 	then
-		System.out.println("Health: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*($count*0.1)));
-		modify($sto) { setSector(Sector.HEALTH_CARE) }
+		double $score = 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)/($count+0.1));
+		System.out.println("Health: " + $score);
+		modify($sto) {
+			setSector(Sector.HEALTH_CARE),
+			setScore($score)
+		}
 end
 
 rule "Get chosen sector data rule"
@@ -75,7 +91,7 @@ rule "Get chosen sector data rule"
     	System.out.println("Hello risk");
         kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("risk").setFocus();
         RiskDataDTO[] data = externalService.test($s.getSector().toString());
-        insert(new Risk(true, $s.isRisk(), $s.isExperience(), data, $s.getSector()));
+        insert(new Risk(true, $s.getScore(), $s.getChosenProfile(), data, $s.getSector()));
         System.out.println("Inserted");
         delete($s);
 end

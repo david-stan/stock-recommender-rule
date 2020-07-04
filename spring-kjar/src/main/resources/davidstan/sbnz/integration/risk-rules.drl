@@ -3,43 +3,70 @@ package davidstan.sbnz.integration;
 import davidstan.sbnz.integration.facts.Stocks;
 import davidstan.sbnz.integration.facts.Risk;
 import davidstan.sbnz.integration.models.Sector;
+import davidstan.sbnz.integration.models.RiskGroup;
 
 agenda-group "risk"
 
-global ExternalService externalService;
-
-rule "Stock selection rule risk & experience"
+rule "High risk"
     when
-        $r: Risk( valid == true && risk == true && experience == true )
+        $risk: Risk(riskGroup == RiskGroup.NA, score <= 10)
     then
-    	$r.iterateStocks(9);
-    	$r.incrementIndex();
-        update($r);
+    	System.out.println("High risk");
+    	modify($risk) { setRiskGroup(RiskGroup.HIGH_RISK) }
 end
 
-rule "Stock selection rule experience"
+rule "Medium risk"
     when
-        $r: Risk( valid == true && risk == false && experience == true )
+        $risk: Risk(riskGroup == RiskGroup.NA, 10 < score && score < 100)
     then
-    	$r.iterateStocks(7);
-    	$r.incrementIndex();
-        update($r);
+    	System.out.println("Medium risk");
+    	modify($risk) { setRiskGroup(RiskGroup.MEDIUM_RISK) }
 end
 
-rule "Stock selection rule riske"
+rule "Low risk"
     when
-        $r: Risk( valid == true && risk == true && experience == false )
+        $risk: Risk(riskGroup == RiskGroup.NA, 100 <= score )
     then
-    	$r.iterateStocks(6.3);
-    	$r.incrementIndex();
-        update($r);
+    	System.out.println("Low risk");
+    	modify($risk) { setRiskGroup(RiskGroup.LOW_RISK) }
 end
 
-rule "Stock selection rule"
-    when
-        $r: Risk( valid == true && risk == false && experience == false )
-    then
-    	$r.iterateStocks(4.8);
-    	$r.incrementIndex();
-        update($r);
+rule "Thresh high"
+	when
+		$risk: Risk(riskGroup == RiskGroup.HIGH_RISK, threshold == 0, $attr: riskAssessments)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this) from $attr,
+			count($p)
+		)
+	then
+		modify($risk) { setThreshold(3*(1+0.1*$count)) }
+end
+
+rule "Thresh medium"
+	when
+		$risk: Risk(riskGroup == RiskGroup.MEDIUM_RISK, threshold == 0, $attr: riskAssessments)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this) from $attr,
+			count($p)
+		)
+	then
+		modify($risk) { setThreshold(5*(1+0.1*$count)) }
+end
+
+rule "Thresh low"
+	when
+		$risk: Risk(riskGroup == RiskGroup.LOW_RISK, threshold == 0, $attr: riskAssessments)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this) from $attr,
+			count($p)
+		)
+	then
+		modify($risk) { setThreshold(7*(1+0.1*$count)) }
+end
+
+rule "Process stocks"
+	when
+		$risk: Risk(riskGroup != RiskGroup.NA, threshold != 0)
+	then
+		$risk.processStocks();
 end

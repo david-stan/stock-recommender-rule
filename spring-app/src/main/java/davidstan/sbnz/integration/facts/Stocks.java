@@ -22,6 +22,8 @@ public class Stocks implements Serializable {
 	
 	private List<Profiles> chosenProfile;
 	
+	private double score;
+	
 	private Map<String, Integer> sectorMapping;
 	
 	public Stocks() {
@@ -57,7 +59,14 @@ public class Stocks implements Serializable {
 	}
 	
 	
-	
+	public double getScore() {
+		return score;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
 	public List<Profiles> getChosenProfile() {
 		return chosenProfile;
 	}
