@@ -31,29 +31,53 @@ Primer:
 - Razmatramo akciju koja u zadnje vreme (par meseci) ima odličan trend, ali je u prošlosti imala velike padove i nekonzistentnost, stoga takvu akciju smatramo većim rizikom i dajemo joj manju ocenu. Dok na primer, za akciju koja se skoro pojavila na tržištu i nema neku veliku vrednost, ali je jako stabilna i ima konzistentan rast, ocenjujemo većom ocenom i predlažemo je korisniku.
 
 Pravila:
-- Prvi korak je profilisanje korisnika na osnovu njegovog odabira sektora na osnovu lične zainteresovanosti kao i obrazovanja iz konkretne oblasti (sektora). Da bi se odabrao odgovarajući sektor koriste se pravila na osnovu forward chaining principa koja kroz iteracije biraju konačnu oblast. Primer pravila:
+- Prvi korak je profilisanje korisnika na osnovu njegovog odabira sektora na osnovu ličnih preferencija kao i trenutnog statističkog stanja iz konkretnih oblasti (sektora). Da bi se odabrao odgovarajući sektor koriste se pravila na osnovu backward chaining principa koja biraju konačnu oblast. Primer pravila:
 
 
-<pre><code>rule "Classify sector by education"
-	lock-on-active true
-    when
-        $s: Stocks( $education: educationSector != null )
-    then
-        $s.updateMap($education);
-        update($s);
+<pre><code>rule "Health Sector rule"
+	salience ((10*($vol*0.00001 + $close*1.2))/(10*($std+0.1)*(($count+0.1)*0.1)))
+	when 
+		$sec: Sectors(sector == Sector.HEALTH_CARE, $std: std, $vol: volume, $close: close, $attr: attributes)
+		$sto: Stocks(sector == Sector.NA, $profile: chosenProfile)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this, this memberOf $attr) from $profile,
+			count($p)
+		)
+	then
+		System.out.println("Health: " + 10*($vol*0.00001 + $close*1.2)/(10*($std+0.1)*(($count+0.1)*0.1)));
+		modify($sto) { setSector(Sector.HEALTH_CARE) }
 end
 </code></pre>
 
-- Drugi korak je filtriranje akcija iz odabrane oblasti, koje su dobijene iz eksternog servisa, na osnovu vrednosti njihovog rizika. Na osnovu backward chaining-a se posmatraju parametri rizika i ackije svrstavaju u odredjene klase rizika. Jednostavna varijanta:
+- Drugi korak je filtriranje akcija iz odabrane oblasti, koje su dobijene iz eksternog servisa, kao i na osnovu vrednosti njihovog rizika. Na osnovu forward chaining-a se posmatraju parametri rizika i ackije svrstavaju u odredjene klase rizika. Primer ulančavanja:
 
 <pre><code>
-rule "Stock selection rule risk"
+rule "High risk"
     when
-        $r: Risk( valid == true && risk == true && experience == false )
+        $risk: Risk(riskGroup == RiskGroup.NA, score <= 10)
     then
-    	$r.iterateStocks(6.3);
-    	$r.incrementIndex();
-        update($r);
+    	System.out.println("High risk");
+    	modify($risk) { setRiskGroup(RiskGroup.HIGH_RISK) }
+end
+</code></pre>
+<pre><code>
+rule "Thresh low"
+	when
+		$risk: Risk(riskGroup == RiskGroup.LOW_RISK, threshold == 0, $attr: riskAssessments)
+		Number($count: intValue >= 0) from accumulate(
+			Profiles($p: this) from $attr,
+			count($p)
+		)
+	then
+		modify($risk) { setThreshold(7*(1+0.1*$count)) }
+end
+</code></pre>
+<pre><code>
+rule "Process stocks"
+	when
+		$risk: Risk(riskGroup != RiskGroup.NA, threshold != 0)
+	then
+		$risk.processStocks();
 end
 </code></pre>
 
