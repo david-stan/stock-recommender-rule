@@ -1,6 +1,7 @@
 package davidstan.sbnz.integration;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +27,7 @@ import davidstan.sbnz.integration.models.RiskAssessmentDTO;
 import davidstan.sbnz.integration.models.Sector;
 import davidstan.sbnz.integration.models.StocksDTO;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class StockController {
 
@@ -38,8 +41,8 @@ public class StockController {
 	@Autowired
 	private RuleService ruleService;
 
-	@RequestMapping(value = "/stocks", method = RequestMethod.GET, produces = "application/json")
-	public Risk getQuestions(@RequestBody StocksDTO stocksDTO) {
+	@RequestMapping(value = "/stocks", method = RequestMethod.POST, produces = "application/json")
+	public Risk getStocks(@RequestBody StocksDTO stocksDTO) {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		String fooResourceUrl
@@ -55,7 +58,7 @@ public class StockController {
 	}
 	
 	@RequestMapping(value = "/rules", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addRules(@RequestBody AddRuleDTO rules) throws IOException {
+	public ResponseEntity<String> addRules(@RequestBody AddRuleDTO rules) throws IOException, URISyntaxException {
 		String title = ruleService.addRule(rules);
 		return new ResponseEntity<>("Rule " + title + " added.", HttpStatus.OK);
 	}
