@@ -1,0 +1,16 @@
+.tp-h2 {
+  margin: 10px;
+}
+.tp-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+.tp-margin {
+  margin: 10px 10px;
+}
+
+button {
+  margin: 10px;
+}

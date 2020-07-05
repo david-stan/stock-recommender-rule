@@ -93,5 +93,4 @@ rule "Get chosen sector data rule"
         RiskDataDTO[] data = externalService.test($s.getSector().toString());
         insert(new Risk(true, $s.getScore(), $s.getChosenProfile(), data, $s.getSector()));
         System.out.println("Inserted");
-        delete($s);
 end

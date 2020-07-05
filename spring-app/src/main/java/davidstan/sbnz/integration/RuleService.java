@@ -21,7 +21,13 @@ public class RuleService {
 
 	public String addRule(AddRuleDTO rules) throws IOException {
 		List<String> text = Arrays.asList(rules.getRuleContent().split("\n"));
-		Path file = Paths.get("../spring-kjar/src/main/resources/davidstan/sbnz/integration/" + rules.getRuleTitle() + ".drl");
+		
+		Path source = Paths.get(this.getClass().getResource("/").getPath());
+        Path newFolder = Paths.get(source.toAbsolutePath() + "/drl/");
+        Files.createDirectories(newFolder);
+        
+		
+		Path file = Paths.get(newFolder.toAbsolutePath() + rules.getRuleTitle() + ".drl");
 		Files.write(file, text, StandardCharsets.UTF_8);
 		return rules.getRuleTitle();
 	}

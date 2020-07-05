@@ -1,0 +1,26 @@
+<div>
+  <h2>Stock recommender</h2>
+  <hr/>
+  <h3 class = "tp-h2">Profiling configuration</h3>
+  <section class = "tp-section">
+    <mat-checkbox class = "tp-margin" [(ngModel)] = "risk">Take risk</mat-checkbox>
+    <mat-checkbox class = "tp-margin" [(ngModel)] = "experience">Experience in trade</mat-checkbox>
+    <mat-checkbox class = "tp-margin" [(ngModel)] = "economy">Education in economy</mat-checkbox>
+    <mat-checkbox class = "tp-margin" [(ngModel)] = "bank">Worked in a bank</mat-checkbox>
+  </section>
+  <section class = "tp-section">
+    <mat-checkbox class = "tp-margin" [(ngModel)] = "medical">Medical worker</mat-checkbox>
+    <mat-checkbox class = "tp-margin" [(ngModel)] = "technology">Interested in technology</mat-checkbox>
+    <mat-checkbox class = "tp-margin" [(ngModel)] = "funds">Have large funds</mat-checkbox>
+  </section>
+  <button type="button" class="btn btn-default" (click)="onClickSubmit()">
+    <span class="glyphicon glyphicon-chevron-right">  Find stocks</span>
+  </button>
+  <hr/>
+
+  <div class="row">
+    <div class="col-md-4" *ngFor="let stock of topStocks">
+      <app-stocks-thumbnail [stock]="stock"></app-stocks-thumbnail>
+    </div>
+  </div>
+</div>
